@@ -34,7 +34,7 @@ def ingest_data():
         }
         data.append(row)
 
-    df = pd.Dataframe(data)
+    df = pd.DataFrame(data)
     df.columns = df.columns.str.lower().str.replace(" ", "_")
 
     return df
