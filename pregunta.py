@@ -45,6 +45,7 @@ def ingest_data():
             dictionary["cantidad"] = int(cantidad)
             dictionary["porcentaje"] = float(porcentaje.replace(",", "."))
             palabras = " ".join(palabras[1:])
+            dictionary["palabras"] += palabras
 
         elif re.match("^ + [a-z]", fila):
             palabras = fila.split()
