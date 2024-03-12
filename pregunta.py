@@ -20,7 +20,7 @@ def ingest_data():
 
     columnas = ["cluster", "key_cant_words", "%_key_words", "principal_key_words"]
 
-    cluster = []
+    clusters = []
 
     dictionary = {
         "cluster": 0,
@@ -48,7 +48,7 @@ def ingest_data():
 
         elif re.match("^\n", fila) or re.match("^ +$", fila):
             dictionary["palabras"] = dictionary["palabras"].replace(".", "")
-            cluster.append(dictionary.values())
+            clusters.append(dictionary.values())
 
             dictionary = {
                 "cluster": 0,
@@ -56,6 +56,6 @@ def ingest_data():
                 "porcentaje": 0,
                 "palabras": "",
             }
-    df = pd.DataFrame(cluster, columns=columnas)
+    df = pd.DataFrame(clusters, columns=columnas)
 
     return df
