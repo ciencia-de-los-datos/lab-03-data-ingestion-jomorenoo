@@ -10,31 +10,52 @@ espacio entre palabra y palabra
 
 """
 
+import re
 import pandas as pd
 
 
 def ingest_data():
-    # Defino el archivo como variable y lo leo
-    archivo = "clusters_report.txt"
 
-    with open(archivo, "r") as f:
-        lineas = f.readlines()
+    filas = []
 
-    data = []
-    for line in lineas:
+    columnas = ["cluster", "key_cant_words", "%_key_words", "principal_key_words"]
 
-        words = line.strip().split()
-        keywords = ", ".join(words[3:])
+    cluster = []
 
-        row = {
-            "cluster_id": words[0],
-            "cluster_size": words[1],
-            "centroid": words[2],
-            "keywords": keywords,
-        }
-        data.append(row)
+    dictionary = {
+        "cluster": 0,
+        "cantidad": 0,
+        "porcentaje": 0,
+        "palabras": "",
+    }
 
-    df = pd.DataFrame(data)
-    df.columns = df.columns.str.lower().str.replace(" ", "_")
+    with open("clusters_report.txt") as cluster:
+        filas = cluster.readlines()
+    filas = filas[4:]
+
+    for fila in filas:
+        if re.match("^ +[0-9]+ +", fila):
+            cluster, cantidad, porcentaje, *palabras = fila.split()
+            dictionary["cluster"] = int(cluster)
+            dictionary["cantidad"] = int(cantidad)
+            dictionary["porcentaje"] = float(porcentaje.replace(",", "."))
+            palabras = " ".join(palabras[1:])
+
+        elif re.match("^ + [a-z]", fila):
+            palabras = fila.split()
+            palabras = " ".join(palabras)
+            dictionary["palabras"] += " " + palabras
+
+        elif re.match("^\n", fila) or re.match("^ +$", fila):
+            dictionary["palabras"] = dictionary["palabras"].replace(".", "")
+            cluster.append(dictionary.values())
+
+            dictionary = {
+                "cluster": 0,
+                "cantidad": 0,
+                "porcentaje": 0,
+                "palabras": "",
+            }
+    df = pd.DataFrame(cluster, columns=columnas)
 
     return df
