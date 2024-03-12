@@ -18,7 +18,12 @@ def ingest_data():
 
     filas = []
 
-    columnas = ["cluster", "key_cant_words", "%_key_words", "principal_key_words"]
+    columnas = [
+        "cluster",
+        "cantidad_de_palabras_clave",
+        "porcentaje_de_palabras_clave",
+        "principales_palabras_clave",
+    ]
 
     clusters = []
 
